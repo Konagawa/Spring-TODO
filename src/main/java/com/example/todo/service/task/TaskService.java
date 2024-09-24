@@ -1,7 +1,9 @@
 package com.example.todo.service.task;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public class TaskService {
     public List<TaskEntity> find() {
         var task1 = new TaskEntity(
