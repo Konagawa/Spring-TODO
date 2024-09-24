@@ -17,15 +17,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td th:text="${taskList[0].id}"></td>
-            <td th:text="${taskList[0].summary}"></td>
-            <td th:text="${taskList[0].status}"></td>
-        </tr>
-        <tr>
-            <td th:text="${taskList[1].id}"></td>
-            <td th:text="${taskList[1].summary}"></td>
-            <td th:text="${taskList[1].status}"></td>
+        <tr th:each="task : ${taskList}" th:object="${task}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{summary}"></td>
+            <td th:text="*{status}"></td>
         </tr>
         </tbody>>
     </table>
