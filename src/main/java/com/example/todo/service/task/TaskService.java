@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService {
@@ -13,5 +15,9 @@ public class TaskService {
 
     public List<TaskEntity> find() {
         return taskRepository.select();
+    }
+    //Optionalは存在すればentityを返し、なにもなければnullになるケースで使用
+    public Optional<TaskEntity> findById(long taskId) {
+        return taskRepository.selectById(taskId);
     }
 }
