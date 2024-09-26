@@ -20,4 +20,10 @@ public class TaskService {
     public Optional<TaskEntity> findById(long taskId) {
         return taskRepository.selectById(taskId);
     }
+
+    public void create(TaskEntity newEntity) {
+        taskRepository.insert(newEntity);
+
+        throw new IllegalArgumentException("TEST");
+    }
 }
