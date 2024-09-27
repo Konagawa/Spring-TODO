@@ -28,9 +28,10 @@ public class TaskController {
     @GetMapping("/{id}") //GET /tasks/1
     public String showDetail(@PathVariable("id") long taskId, Model model) {
         //taskId -> TaskEntity
-        var taskEntity = taskService.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("Task not found: id = " + taskId));
-        model.addAttribute("task", TaskDTO.toDTO(taskEntity));
+        var taskDTO = taskService.findById(taskId)
+                .map(TaskDTO::toDTO)
+                .orElseThrow(TaskNotFoundException::new);
+        model.addAttribute("task", taskDTO);
         return "tasks/detail";
     }
 
@@ -53,9 +54,9 @@ public class TaskController {
     // GET /tasks/{taskId}/editForm
     @GetMapping("/{id}/editForm")
     public String showEditForm(@PathVariable("id") long id, Model model) {
-        var taskEntity= taskService.findById(id)
+        var form = taskService.findById(id)
+                .map(TaskForm::fromEntity)
                         .orElseThrow(TaskNotFoundException::new);
-        var form = new TaskForm(taskEntity.summary(), taskEntity.description(), taskEntity.status().name());
         model.addAttribute("taskForm", form);
         return "tasks/form";
     }
