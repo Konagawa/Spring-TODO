@@ -37,15 +37,16 @@ public class TaskController {
 
     // GET /tasks/creationForm
     @GetMapping("/creationForm")
-    public String showCreationFrom(@ModelAttribute TaskForm form) {
+    public String showCreationFrom(@ModelAttribute TaskForm form, Model model) {
+        model.addAttribute("mode", "CREATE");
         return "tasks/form";
     }
 
     // POST /tasks
     @PostMapping
-    public String create(@Validated TaskForm form, BindingResult bindingResult) {
+    public String create(@Validated TaskForm form, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return showCreationFrom(form);
+            return showCreationFrom(form, model);
         }
         taskService.create(form.toEntity());
         return "redirect:/tasks";
@@ -58,6 +59,22 @@ public class TaskController {
                 .map(TaskForm::fromEntity)
                         .orElseThrow(TaskNotFoundException::new);
         model.addAttribute("taskForm", form);
+        model.addAttribute("mode", "edit");
         return "tasks/form";
+    }
+
+    @PutMapping("{id}") // PUT /tasks/{id}
+    public String update(
+            @PathVariable("id")long id,
+            @Validated @ModelAttribute TaskForm form,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("mode", "EDIT");
+            return "tasks/form";
+
+        }
+        return "redirect:/tasks/{id}";
     }
 }
